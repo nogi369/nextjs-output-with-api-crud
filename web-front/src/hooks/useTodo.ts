@@ -1,19 +1,27 @@
-import { useCallback, useState } from 'react';
-import { INIT_TODO_LIST, INIT_UNIQUE_ID } from '../constants/data';
+import { useCallback, useEffect, useState } from "react";
+import { INIT_UNIQUE_ID } from "../constants/data";
+import { TodoType } from "@/interfaces/Todo";
+import { fetchTodoListApi } from "@/apis/todoApi";
 
 export const useTodo = () => {
   // Todoリスト
-  const [originTodoList, setOriginTodoList] = useState(INIT_TODO_LIST);
+  const [originTodoList, setOriginTodoList] = useState(<Array<TodoType>>[]);
   // 一意のid
   const [uniqueId, setUniqueId] = useState(INIT_UNIQUE_ID);
 
   /* actions */
+
+  const fetchTodoList = useCallback(async (): Promise<void> => {
+    const data = await fetchTodoListApi();
+    setOriginTodoList(typeof data === "object" ? data : []);
+  }, []);
+
   /**
    * Todo新規登録処理
    * @param {string} title
    * @param {string} content
    */
-  const addTodo: (title: string, content: string) => void = useCallback(
+  const addTodo = useCallback(
     (title: string, content: string) => {
       const nextUniqueId = uniqueId + 1;
       const newTodo = [
@@ -37,7 +45,7 @@ export const useTodo = () => {
    * @param {string} content
    * @type {(function(*, *, *): void)|*}
    */
-  const updateTodo: (id: number, title: string, content: string) => void = useCallback(
+  const updateTodo = useCallback(
     (id: number, title: string, content: string) => {
       const updatedTodoList = originTodoList.map((todo) => {
         if (id === todo.id) {
@@ -61,17 +69,23 @@ export const useTodo = () => {
    * @param { string }targetTitle
    */
   // 削除処理
-  const deleteTodo: (targetId: number, targetTitle: string) => void = useCallback(
+  const deleteTodo = useCallback(
     (targetId: number, targetTitle: string) => {
       // 「OK」時の処理 ＋ 確認ダイアログの表示
       if (window.confirm(`「${targetTitle}」のtodoを削除しますか？`)) {
-        const newTodoList = originTodoList.filter((todo) => todo.id !== targetId);
+        const newTodoList = originTodoList.filter(
+          (todo) => todo.id !== targetId
+        );
 
         setOriginTodoList(newTodoList);
       }
     },
     [originTodoList]
   );
+
+  useEffect(() => {
+    fetchTodoList();
+  }, [fetchTodoList]);
 
   return {
     originTodoList,

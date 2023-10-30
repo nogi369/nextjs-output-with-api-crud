@@ -20,7 +20,6 @@ export const useTodoList = () => {
   // 編集ページに遷移する処理
   const handleMoveEditPage = useCallback(
     (id: number) => router.push(`${NAVIGATION_PATH.EDIT}${id}`),
-    // (id: number) => router.push(`http://localhost:3001/todo/edit/1`),
     [router]
   );
 
