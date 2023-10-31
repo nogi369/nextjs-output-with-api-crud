@@ -1,19 +1,24 @@
-import { useCallback, useEffect, useState } from "react";
-import { INIT_UNIQUE_ID } from "../constants/data";
-import { TodoType } from "@/interfaces/Todo";
-import { fetchTodoListApi } from "@/apis/todoApi";
+/**
+ * useTodo
+ *
+ * @package hooks
+ */
+import { useState, useCallback, useEffect } from 'react';
+import { fetchTodoListApi, createTodoApi, updateTodoApi, deleteTodoApi } from '@/apis/todoApi';
+import { TodoType } from '@/interfaces/Todo';
 
+/**
+ * useTodo
+ */
 export const useTodo = () => {
-  // Todoリスト
-  const [originTodoList, setOriginTodoList] = useState(<Array<TodoType>>[]);
-  // 一意のid
-  const [uniqueId, setUniqueId] = useState(INIT_UNIQUE_ID);
+  /* todolist */
+  const [originTodoList, setOriginTodoList] = useState<Array<TodoType>>([]);
 
   /* actions */
 
   const fetchTodoList = useCallback(async (): Promise<void> => {
     const data = await fetchTodoListApi();
-    setOriginTodoList(typeof data === "object" ? data : []);
+    setOriginTodoList(typeof data === 'object' ? data : []);
   }, []);
 
   /**
@@ -22,20 +27,19 @@ export const useTodo = () => {
    * @param {string} content
    */
   const addTodo = useCallback(
-    (title: string, content: string) => {
-      const nextUniqueId = uniqueId + 1;
-      const newTodo = [
+    async (title: string, content: string) => {
+      const todo = await createTodoApi(title, content);
+      if (typeof todo !== 'object') return;
+      setOriginTodoList([
         ...originTodoList,
         {
-          id: nextUniqueId,
-          title: title,
-          content: content,
+          id: todo.id,
+          title: todo.title,
+          content: todo.content,
         },
-      ];
-      setOriginTodoList(newTodo);
-      setUniqueId(nextUniqueId);
+      ]);
     },
-    [originTodoList, uniqueId]
+    [originTodoList]
   );
 
   /**
@@ -43,16 +47,17 @@ export const useTodo = () => {
    * @param {number} id
    * @param {string} title
    * @param {string} content
-   * @type {(function(*, *, *): void)|*}
    */
   const updateTodo = useCallback(
-    (id: number, title: string, content: string) => {
+    async (id: number, title: string, content: string) => {
+      const responseTodo = await updateTodoApi(id, title, content);
+      if (typeof responseTodo !== 'object') return;
       const updatedTodoList = originTodoList.map((todo) => {
-        if (id === todo.id) {
+        if (responseTodo.id === todo.id) {
           return {
-            id: todo.id,
-            title: title,
-            content: content,
+            id: responseTodo.id,
+            title: responseTodo.title,
+            content: responseTodo.content,
           };
         }
 
@@ -68,17 +73,13 @@ export const useTodo = () => {
    * @param { number } targetId
    * @param { string }targetTitle
    */
-  // 削除処理
   const deleteTodo = useCallback(
-    (targetId: number, targetTitle: string) => {
-      // 「OK」時の処理 ＋ 確認ダイアログの表示
-      if (window.confirm(`「${targetTitle}」のtodoを削除しますか？`)) {
-        const newTodoList = originTodoList.filter(
-          (todo) => todo.id !== targetId
-        );
+    async (targetId: number) => {
+      const deletedTodo = await deleteTodoApi(targetId);
+      if (typeof deletedTodo !== 'object') return;
 
-        setOriginTodoList(newTodoList);
-      }
+      // todoを削除したtodo listで更新
+      setOriginTodoList(originTodoList.filter((todo) => todo.id !== deletedTodo.id));
     },
     [originTodoList]
   );

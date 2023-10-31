@@ -1,11 +1,15 @@
-import { NavigationLink } from '../../atoms/NavigationLink';
-import { NAVIGATION_PATH } from '../../../constants/navigation';
-import styles from './styles.module.css';
+/**
+ * Navigation
+ *
+ * @package components
+ */
 import { FC } from 'react';
+import { NavigationLink } from '@/components/atoms/NavigationLink';
+import { NAVIGATION_PATH } from '@/constants/navigation';
+import styles from './styles.module.css';
 
 /**
  * Navigation
- * @returns {JSX.Element}
  * @constructor
  */
 export const Navigation: FC = () => (
@@ -16,8 +20,3 @@ export const Navigation: FC = () => (
     </ul>
   </nav>
 );
-
-// <Link to={linkPath}>{title}</Link>;
-
-// navタグ
-// https://style.potepan.com/articles/21440.html

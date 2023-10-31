@@ -1,11 +1,15 @@
-import { TodoListTemplate } from "@/components/Templates/TodoListTemplate";
-import { NextPage } from "next";
+/**
+ * TodoListPage
+ *
+ * @package pages
+ */
+import type { NextPage } from 'next'
+import {TodoListTemplate} from "@/components/templates/TodoListTemplate";
 
-const TodoListPage: NextPage = () => <TodoListTemplate />;
+/**
+ * TodoListPage
+ * @constructor
+ */
+const TodoListPage: NextPage = () => <TodoListTemplate />
 
-export default TodoListPage;
-
-// http://localhost:3001/
-// http://localhost:3001/todo/create
-// http://localhost:3001/todo/detail/1
-// http://localhost:3001/todo/edit/1
+export default TodoListPage

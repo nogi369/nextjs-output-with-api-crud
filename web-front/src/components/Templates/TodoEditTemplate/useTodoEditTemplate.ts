@@ -1,59 +1,72 @@
-import { useState, useCallback, useMemo } from "react";
-import { NAVIGATION_PATH } from "../../../constants/navigation";
-import { TodoType } from "../../../interfaces/Todo";
-import { EventType } from "../../../interfaces/Event";
-import { useRouter } from "next/router";
+/**
+ * useTodoEditTemplate
+ *
+ * @package components
+ */
+import { useMemo, useState, useCallback } from 'react';
+import { useRouter } from 'next/router';
+import { NAVIGATION_PATH } from '@/constants/navigation';
+import { TodoType } from '@/interfaces/Todo';
+import { EventType } from '@/interfaces/Event';
 
 type Params = {
-  originTodoList: Array<TodoType>;
+  originTodoList: Array<TodoType>
   updateTodo: (id: number, title: string, content: string) => void;
-};
+}
 
 type StatesType = {
-  todo: TodoType | undefined;
-  inputTitle: string;
-  inputContent: string;
-};
+  todo: TodoType | undefined
+  inputTitle: string,
+  inputContent: string
+}
 
 type ActionsType = {
-  handleChangeTitle: EventType["onChangeInput"];
-  handleChangeContent: EventType["onChangeTextArea"];
-  handleUpdateTodo: EventType["onSubmit"];
-};
+  handleChangeTitle: EventType['onChangeInput']
+  handleChangeContent: EventType['onChangeTextArea']
+  handleUpdateTodo: EventType['onSubmit']
+}
 
+/**
+ * useTodoEditTemplate
+ * @param originTodoList
+ * @param updateTodo
+ */
 export const useTodoEditTemplate = ({ originTodoList, updateTodo }: Params) => {
-  // 画面遷移操作を実現
   const router = useRouter();
-  // メモ化
   const todo = useMemo(
     () => originTodoList.find((todo) => String(todo.id) === router?.query?.id),
-    [originTodoList, router?.query?.id]
+    [router?.query?.id, originTodoList]
   );
+  /* local state */
+  const [inputTitle, setInputTitle] = useState(todo?.title || '');
+  const [inputContent, setInputContent] = useState(todo?.content || '');
 
-  // local state
-
-  // todo?.title = undefinedにすることで参照エラーになることを防ぐ
-  const [inputTitle, setInputTitle] = useState(todo?.title || "");
-  const [inputContent, setInputContent] = useState(todo?.content || "");
-
-  // title変更処理
-  const handleChangeTitle: EventType["onChangeInput"] = useCallback(
+  /**
+   * 「title」変更処理
+   * @type {function(*): void}
+   */
+  const handleChangeTitle: EventType['onChangeInput'] = useCallback(
     (e) => setInputTitle(e.target.value),
     []
   );
 
-  // content変更処理
-  const handleChangeContent: EventType["onChangeTextArea"] = useCallback(
+  /**
+   * 「content」変更処理
+   * @type {function(*): void}
+   */
+  const handleChangeContent: EventType['onChangeTextArea'] = useCallback(
     (e) => setInputContent(e.target.value),
     []
   );
 
-  // Todo更新実行処理
-  const handleUpdateTodo: EventType["onSubmit"] = useCallback(
+  /**
+   * Todo更新処理
+   * @type {(function(*): void)|*}
+   */
+  const handleUpdateTodo: EventType['onSubmit'] = useCallback(
     (e) => {
       e.preventDefault();
-      // todo.idがある かつ inputTitleが空文字でない かつ inputContentが空文字でない
-      if (!!todo?.id && inputTitle !== "" && inputContent !== "") {
+      if (!!todo?.id && inputTitle !== '' && inputContent !== '') {
         updateTodo(todo.id, inputTitle, inputContent);
         router.push(NAVIGATION_PATH.TOP);
       }
@@ -64,13 +77,13 @@ export const useTodoEditTemplate = ({ originTodoList, updateTodo }: Params) => {
   const states: StatesType = {
     todo,
     inputTitle,
-    inputContent,
+    inputContent
   };
 
   const actions: ActionsType = {
     handleChangeTitle,
     handleChangeContent,
-    handleUpdateTodo,
+    handleUpdateTodo
   };
 
   return [states, actions] as const;

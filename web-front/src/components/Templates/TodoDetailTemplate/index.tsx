@@ -1,29 +1,31 @@
-import { InputForm } from "../../atoms/InputForm";
-import { TextArea } from "../../atoms/TextArea";
-import { BaseLayout } from "../../organisms/BaseLayout";
-import { useTodoContext } from "../../../Contexts/TodoContext";
-import styles from "./styles.module.css";
-import { useRouter } from "next/router";
+/**
+ * TodoDetailTemplate
+ *
+ * @package components
+ */
+import { FC } from 'react';
+import { BaseLayout } from '@/components/organisms/BaseLayout';
+import { InputForm } from '@/components/atoms/InputForm';
+import { TextArea } from '@/components/atoms/TextArea';
+import { useTodoDetailTemplate } from './useTodoDetailTemplate';
+import styles from './styles.module.css';
 
-export const TodoDetailTemplate = () => {
-  const router = useRouter();
-  // グローバルstate取得
-  const { originTodoList } = useTodoContext();
-  // Todo定義
-  const todo = originTodoList.find(
-    (todo) => String(todo.id) === router?.query?.id
-  );
+/**
+ * TodoDetailTemplate
+ * @returns
+ */
+export const TodoDetailTemplate: FC = () => {
+  const [{ todo }] = useTodoDetailTemplate();
 
-  // disabled : https://www.delftstack.com/ja/howto/react/disable-button-in-react/
   return (
-    <BaseLayout title={"TodoDetail"}>
+    <BaseLayout title={'TodoDetail'}>
       {!!todo && (
         <div className={styles.container}>
           <div className={styles.area}>
-            <InputForm disabled value={todo.title} placeholder={"Title"} />
+            <InputForm disabled value={todo.title} placeholder={'Title'} />
           </div>
           <div className={styles.area}>
-            <TextArea disabled value={todo.content} placeholder={"Content"} />
+            <TextArea disabled value={todo.content} placeholder={'Content'} />
           </div>
         </div>
       )}
