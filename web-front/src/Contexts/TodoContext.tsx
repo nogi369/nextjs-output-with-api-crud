@@ -1,37 +1,36 @@
-/**
- * TodoContext
- *
- * @package contexts
- */
-import { FC, ReactNode, useContext, createContext } from 'react';
-import { TodoType } from '@/interfaces/Todo';
-import { useTodo } from '@/hooks/useTodo';
+// https://ja.legacy.reactjs.org/docs/context.html
 
+import { FC, ReactNode, createContext, useContext } from "react";
+import { useTodo } from "../hooks/useTodo";
+import { TodoType } from "../interfaces/Todo";
+
+// ReactNode
+// https://maku.blog/p/xenv4bh/
 type Props = {
   children: ReactNode;
 };
 
 interface ContextInterface {
   originTodoList: Array<TodoType>;
-  addTodo: (title: string, content: string) => Promise<void>;
-  updateTodo: (id: number, title: string, content: string) => Promise<void>;
-  deleteTodo: (targetId: number) => Promise<void>;
+  addTodo: (title: string, content: string) => void;
+  updateTodo: (id: number, title: string, content: string) => void;
+  deleteTodo: (targetId: number, targetTitle: string) => void;
 }
 
-/**
- * TodoContext
- */
+// {} = 空のオブジェクトを作成
 const TodoContext = createContext({} as ContextInterface);
 
+// children: https://choippo.com/react-component-children/
+// useTodoからstateとpropsを取り出す
 /**
  * TodoProvider
  * @param children
  * @constructor
  */
-export const TodoProvider: FC<Props> = ({ children }) => {
-  // カスタムフックから状態とロジックを呼び出してコンテキストプロバイダーにあてがう
+const TodoProvider: FC<Props> = ({ children }) => {
   const { originTodoList, addTodo, updateTodo, deleteTodo } = useTodo();
 
+  // Context.Provider で配下コンポーネントにContextを提供する
   return (
     <TodoContext.Provider
       value={{
@@ -49,4 +48,6 @@ export const TodoProvider: FC<Props> = ({ children }) => {
 /**
  * useTodoContext
  */
-export const useTodoContext = () => useContext(TodoContext);
+const useTodoContext = () => useContext(TodoContext);
+
+export { TodoProvider, useTodoContext };

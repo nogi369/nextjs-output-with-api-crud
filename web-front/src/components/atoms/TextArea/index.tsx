@@ -1,12 +1,7 @@
-/**
- * TextArea
- *
- * @package components
- */
 import { FC } from 'react';
 import styles from './styles.module.css';
 
-type Props = JSX.IntrinsicElements['textarea']
+type props = JSX.IntrinsicElements['textarea'];
 
 /**
  * TextArea
@@ -14,20 +9,9 @@ type Props = JSX.IntrinsicElements['textarea']
  * @param value
  * @param placeholder
  * @param onChange
+ * @returns {JSX.Element}
  * @constructor
  */
-export const TextArea: FC<Props> =
-  ({
-     disabled,
-     value,
-     placeholder,
-     onChange
-   }) => (
-    <textarea
-      disabled={disabled}
-      className={styles.text}
-      value={value}
-      placeholder={placeholder}
-      onChange={onChange}
-    />
-  );
+export const TextArea: FC<props> = ({ disabled = false, placeholder, value, onChange }) => (
+  <textarea disabled={disabled} className={styles.text} placeholder={placeholder} value={value} onChange={onChange} />
+);

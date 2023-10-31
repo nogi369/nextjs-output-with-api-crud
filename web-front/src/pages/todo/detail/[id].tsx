@@ -1,15 +1,6 @@
-/**
- * TodoDetailPage
- *
- * @package pages
- */
-import type { NextPage } from 'next'
-import {TodoDetailTemplate} from "@/components/templates/TodoDetailTemplate"
+import { TodoDetailTemplate } from "@/components/Templates/TodoDetailTemplate";
+import { NextPage } from "next";
 
-/**
- * TodoDetailPage
- * @constructor
- */
-const TodoDetailPage: NextPage = () => <TodoDetailTemplate />
+const TodoDetailPage: NextPage = () => <TodoDetailTemplate />;
 
-export default TodoDetailPage
+export default TodoDetailPage;

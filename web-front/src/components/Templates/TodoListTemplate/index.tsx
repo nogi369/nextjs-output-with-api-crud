@@ -1,39 +1,40 @@
 /**
- * TodoListTemplate
+ * TodoTemplate
  *
  * @package components
  */
-import { BaseLayout } from '@/components/organisms/BaseLayout';
-import { InputForm } from '@/components/atoms/InputForm';
-import { TodoList } from '@/components/organisms/TodoList';
-import { useTodoContext } from '@/contexts/TodoContext';
-import { useTodoTemplate } from './useTodoTemplate';
-import styles from './styles.module.css';
+import { InputForm } from "../../atoms/InputForm";
+import { BaseLayout } from "../../organisms/BaseLayout";
+import { useTodoTemplate } from "./useTodoTemplate";
+import { TodoList } from "../../organisms/TodoList";
+import { useTodoContext } from "../../../Contexts/TodoContext";
+import styles from "./styles.module.css";
 
 /**
- * TodoListTemplate
+ * TodoTemplate
  * @returns {JSX.Element}
  * @constructor
  */
-export const TodoListTemplate = () => {
-  // コンテキストから状態とロジックを呼び出してコンポーネントにあてがう
-  const { originTodoList, deleteTodo } = useTodoContext();
 
-  const [{ searchKeyword, showTodoList }, { handleChangeSearchKeyword, handleDeleteTodo }] = useTodoTemplate({
-    originTodoList,
-    deleteTodo,
-  });
+export const TodoListTemplate = () => {
+  const { originTodoList, deleteTodo } = useTodoContext();
+  const [{ searchKeyword, showTodoList }, { handleChangeSearchKeyword }] =
+    useTodoTemplate({ originTodoList });
 
   return (
-    <BaseLayout title={'TodoList'}>
+    <BaseLayout title={"TodoList"}>
       <div className={styles.container}>
-        {/* Todo検索フォームエリア */}
         <div className={styles.area}>
-          <InputForm value={searchKeyword} placeholder={'Search Keyword'} onChange={handleChangeSearchKeyword} />
+          <InputForm
+            onChange={handleChangeSearchKeyword}
+            value={searchKeyword}
+            placeholder={"Search Keyword"}
+          />
         </div>
-        {/* Todoリスト一覧表示 */}
         <div className={styles.area}>
-          {showTodoList?.length > 0 && <TodoList todoList={showTodoList} handleDeleteTodo={handleDeleteTodo} />}
+          {showTodoList.length > 0 && (
+            <TodoList todoList={showTodoList} handleDeleteTodo={deleteTodo} />
+          )}
         </div>
       </div>
     </BaseLayout>

@@ -1,15 +1,6 @@
-/**
- * TodoCreatePage
- *
- * @package pages
- */
-import type { NextPage } from 'next'
-import {TodoCreateTemplate} from "@/components/templates/TodoCreateTemplate"
+import { TodoCreateTemplate } from "@/components/Templates/TodoCreateTemplate";
+import { NextPage } from "next";
 
-/**
- * TodoCreatePage
- * @constructor
- */
-const TodoCreatePage: NextPage = () => <TodoCreateTemplate />
+const TodoCreatePage: NextPage = () => <TodoCreateTemplate />;
 
-export default TodoCreatePage
+export default TodoCreatePage;
