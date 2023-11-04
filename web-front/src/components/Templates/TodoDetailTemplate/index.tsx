@@ -1,7 +1,7 @@
 import { InputForm } from "../../atoms/InputForm";
 import { TextArea } from "../../atoms/TextArea";
 import { BaseLayout } from "../../organisms/BaseLayout";
-import { useTodoContext } from "../../../Contexts/TodoContext";
+import { useTodoContext } from "../../../contexts/TodoContext";
 import styles from "./styles.module.css";
 import { useRouter } from "next/router";
 

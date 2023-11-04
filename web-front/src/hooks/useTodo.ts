@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { INIT_TODO_LIST, INIT_UNIQUE_ID } from "../constants/data";
+import { fetchTodoListApi } from "@/apis/todoApi";
 
 export const useTodo = () => {
   // Todoリスト
@@ -8,6 +9,12 @@ export const useTodo = () => {
   const [uniqueId, setUniqueId] = useState(INIT_UNIQUE_ID);
 
   /* actions */
+
+  const fetchTodoList = useCallback(async (): Promise<void> => {
+    const data = await fetchTodoListApi();
+    setOriginTodoList(typeof data === "object" ? data : []);
+  }, []);
+
   /**
    * Todo新規登録処理
    * @param {string} title
@@ -74,6 +81,11 @@ export const useTodo = () => {
     },
     [originTodoList]
   );
+
+  // 実行したい関数とか処理, 実行したいタイミング
+  useEffect(() => {
+    fetchTodoList();
+  }, [fetchTodoList]);
 
   return {
     originTodoList,
