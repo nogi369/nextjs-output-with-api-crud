@@ -3,16 +3,11 @@ import { TextArea } from "../../atoms/TextArea";
 import { BaseLayout } from "../../organisms/BaseLayout";
 import { useTodoContext } from "../../../contexts/TodoContext";
 import styles from "./styles.module.css";
-import { useRouter } from "next/router";
+import { FC } from "react";
+import { useTodoDetailTemplate } from "./useTodoDetailTemplate";
 
-export const TodoDetailTemplate = () => {
-  const router = useRouter();
-  // グローバルstate取得
-  const { originTodoList } = useTodoContext();
-  // Todo定義
-  const todo = originTodoList.find(
-    (todo) => String(todo.id) === router?.query?.id
-  );
+export const TodoDetailTemplate: FC = () => {
+  const [{ todo }] = useTodoDetailTemplate();
 
   // disabled : https://www.delftstack.com/ja/howto/react/disable-button-in-react/
   return (
